@@ -45,8 +45,10 @@ func main() {
 	baseContext.SetRGB(1, 1, 1)
 	// dc.MeasureString() for adjusting text rendering
 	// DrawRoundedRectangle might be nice
-	corners := albart.LaneCorners(albart.South, width, height, logoContext.Width(), logoContext.Height())
+	corners := albart.LaneCorners(albart.North, width, height, logoContext.Width(), logoContext.Height())
+
 	anchor := albart.LaneAnchor(corners)
+
 	baseContext.DrawImageAnchored(logoContext.Image(), int(anchor.X), int(anchor.Y), 0, 0)
 
 	// need to rescale this to desired output dimensions

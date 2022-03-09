@@ -1,6 +1,7 @@
 package albart
 
 import (
+	"log"
 	"math/rand"
 
 	"github.com/fogleman/gg"
@@ -16,13 +17,17 @@ const (
 )
 
 func LaneAnchor(corners [4]gg.Point) gg.Point {
-	xMin, xMax := corners[3].X, corners[2].X
-	yMin, yMax := corners[0].Y, corners[1].Y
+	xMin, xMax := corners[3].X, corners[1].X
+	yMin, yMax := corners[3].Y, corners[1].Y
 
-	return gg.Point{
-		X: xMin + float64(rand.Intn(int(xMax))),
-		Y: yMin + float64(rand.Intn(int(yMax))),
+	x := float64(rand.Intn(int(xMax - xMin)))
+	y := float64(rand.Intn(int(yMax - yMin)))
+	p := gg.Point{
+		X: xMin + x,
+		Y: yMin + y,
 	}
+	log.Printf("%#v", p)
+	return p
 }
 
 func LaneCorners(lane Lane, x, y, w, h int) [4]gg.Point {
