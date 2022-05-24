@@ -49,7 +49,7 @@ func main() {
 
 	anchor := albart.LaneAnchor(corners)
 
-	baseContext.DrawImageAnchored(logoContext.Image(), int(anchor.X), int(anchor.Y), 0, 0)
+	baseContext.DrawImageAnchored(logoContext.Image(), int(anchor.X)*2, int(anchor.Y), .5, .5)
 
 	// need to rescale this to desired output dimensions
 	err = baseContext.SavePNG(outfile)
