@@ -70,7 +70,7 @@ func main() {
 		{0xD5, 0x60, 0x62, 0xFF},
 	}
 	c := generativeart.NewCanva(width, height)
-	c.SetBackground(color.RGBA{0xF0, 0xFE, 0xFF, 0xFF})
+	c.SetBackground(color.RGBA{0x00, 0x00, 0x00, 0xFF})
 	c.FillBackground()
 	c.SetColorSchema(colors)
 	c.Draw(arts.NewNoiseLine(1000))
