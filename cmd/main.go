@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"image/color"
 	"log"
-	// "math/rand"
+	"math/rand"
+	"time"
 
 	"github.com/fogleman/gg"
 	"github.com/jdxyw/generativeart"
@@ -35,10 +36,13 @@ func LogoAnchor(c *gg.Context, logo *gg.Context) gg.Point {
 */
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+	//rand.Seed(8675309)
 	var (
 		logo          string
 		outfile       string
 		track         string
+		style         string
 		width, height int
 	)
 
@@ -47,6 +51,7 @@ func main() {
 	flag.StringVar(&logo, "logo", "", "path to logo png")
 	flag.StringVar(&outfile, "outfile", "", "path to output file")
 	flag.StringVar(&track, "track", "", "track title")
+	flag.StringVar(&style, "style", "", "art style: noiseline, blackhole, circlenoise, contourline, domainwarp, gsquare, janus")
 
 	flag.Parse()
 
@@ -60,8 +65,9 @@ func main() {
 		log.Fatalf("error opening logo: %s\n", err)
 	}
 	// logoContext := gg.NewContext(
-	logoContext := gg.NewContextForImage(resize.Resize(uint(width/4), 0, logoFile, resize.Lanczos3))
+	logoContext := gg.NewContextForImage(resize.Resize(uint(float64(width)*0.45), 0, logoFile, resize.Lanczos3))
 
+	// reasonable colors here?
 	colors := []color.RGBA{
 		{0x06, 0x7B, 0xC2, 0xFF},
 		{0x84, 0xBC, 0xDA, 0xFF},
