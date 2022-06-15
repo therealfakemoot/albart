@@ -21,7 +21,7 @@ func main() {
 
 	flag.Parse()
 
-	log.Println(buildPalette(infile))
+	log.Printf("color palette: %#v", buildPalette(infile))
 
 }
 
@@ -44,7 +44,7 @@ func buildPalette(infile string) []*color.Color {
 			log.Fatal(err)
 		}
 
-		log.Println(record)
+		log.Printf("Record found: %#v\n", record)
 	}
 
 	return p
