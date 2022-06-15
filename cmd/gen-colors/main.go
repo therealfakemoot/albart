@@ -25,8 +25,8 @@ func main() {
 
 }
 
-func buildPalette(infile string) []*color.Color {
-	p := make([]*color.Color, 0)
+func buildPalette(infile string) []color.Color {
+	p := make([]color.Color, 0)
 	f, err := os.Open(infile)
 	if err != nil {
 		log.Println("Couldn't open infile")
