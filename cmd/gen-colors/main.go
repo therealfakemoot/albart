@@ -25,8 +25,13 @@ func main() {
 
 }
 
-func buildPalette(infile string) []color.Color {
-	p := make([]color.Color, 0)
+type Palette struct {
+	Name   string
+	Colors []color.Color
+}
+
+func buildPalette(infile string) []Palette {
+	p := make([]Palette, 0)
 	f, err := os.Open(infile)
 	if err != nil {
 		log.Println("Couldn't open infile")
@@ -41,10 +46,16 @@ func buildPalette(infile string) []color.Color {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalf("Error reading record: %s\n", err)
 		}
 
 		log.Printf("Record found: %#v\n", record)
+		name, colors, err := ExtractRecord(record)
+		if err != nil {
+			log.Fatalf("Error extracting palette from record: %s\n", err)
+		}
+		p = append(p, Palette{Name: name, Colors: colors})
+
 	}
 
 	return p
@@ -66,7 +77,7 @@ func ExtractRecord(record []string) (string, []color.Color, error) {
 }
 
 func extractRGB(hex string) (color.RGBA, error) {
-	rgb, err := strconv.ParseUint(hex, 16, 8)
+	rgb, err := strconv.ParseUint(hex, 16, 64)
 	if err != nil {
 		return color.RGBA{}, err
 	}
