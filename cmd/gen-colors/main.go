@@ -82,13 +82,9 @@ func extractRGB(hex string) (color.RGBA, error) {
 		return color.RGBA{}, err
 	}
 
-	blueMask := uint64(0xFF0000)
-	greenMask := uint64(0xFF00)
-	redMask := uint64(0xFF)
-
 	return color.RGBA{
-		R: uint8((rgb & redMask)),
-		G: uint8((rgb & blueMask)),
-		B: uint8((rgb & greenMask)),
+		R: uint8((rgb >> 16)),
+		G: uint8((rgb >> 8) & 0xFF),
+		B: uint8((rgb & 0xFF)),
 	}, nil
 }
