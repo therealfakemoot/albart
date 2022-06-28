@@ -6,6 +6,8 @@ import (
 	"image/color"
 	"log"
 	"math/rand"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/fogleman/gg"
@@ -43,17 +45,51 @@ func main() {
 		outfile       string
 		track         string
 		style         string
+		paletteDir    string
+		listPalettes  bool
 		width, height int
 	)
 
 	flag.IntVar(&width, "width", 1000, "output width in pixels")
 	flag.IntVar(&height, "height", 1000, "output height in pixels")
+	flag.BoolVar(&listPalettes, "listPalettes", false, "output color list")
 	flag.StringVar(&logo, "logo", "", "path to logo png")
 	flag.StringVar(&outfile, "outfile", "", "path to output file")
+	flag.StringVar(&paletteDir, "paletteDir", ".", "directory that contains color palette csv files")
 	flag.StringVar(&track, "track", "", "track title")
 	flag.StringVar(&style, "style", "", "art style: noiseline, blackhole, circlenoise, contourline, domainwarp, gsquare, janus")
 
 	flag.Parse()
+
+	palettes, err := filepath.Glob(filepath.Join(paletteDir, "*.csv"))
+	if err != nil {
+		log.Fatalf("error scanning for palettes: %s\n", err)
+	}
+
+	log.Println("Found palettes:", palettes)
+
+	colorPalettes := make(map[string][]color.RGBA)
+	swatchNames := make([]string, 0)
+	for _, p := range palettes {
+		f, err := os.Open(p)
+		if err != nil {
+			log.Fatalf("error opening palette %s: %s\n", p, err)
+		}
+
+		pal, err := albart.BuildPaletteFromFile(f)
+		if err != nil {
+			log.Fatalf("error building palette %s: %s\n", p, err)
+		}
+		for _, swatch := range pal {
+			colorPalettes[swatch.Name] = swatch.Colors
+			swatchNames = append(swatchNames, swatch.Name)
+		}
+	}
+
+	if listPalettes {
+		fmt.Printf("%#v\n", swatchNames)
+		return
+	}
 
 	if outfile == "" {
 		fmt.Println("please provide the -outfile flag")
@@ -67,18 +103,15 @@ func main() {
 	// logoContext := gg.NewContext(
 	logoContext := gg.NewContextForImage(resize.Resize(uint(float64(width)*0.45), 0, logoFile, resize.Lanczos3))
 
+	rand.Shuffle(len(swatchNames), func(i, j int) {
+		swatchNames[i], swatchNames[j] = swatchNames[j], swatchNames[i]
+	})
+
 	// reasonable colors here?
-	colors := []color.RGBA{
-		{0x06, 0x7B, 0xC2, 0xFF},
-		{0x84, 0xBC, 0xDA, 0xFF},
-		{0xEC, 0xC3, 0x0B, 0xFF},
-		{0xF3, 0x77, 0x48, 0xFF},
-		{0xD5, 0x60, 0x62, 0xFF},
-	}
 	c := generativeart.NewCanva(width, height)
 	c.SetBackground(color.RGBA{0x00, 0x00, 0x00, 0xFF})
 	c.FillBackground()
-	c.SetColorSchema(colors)
+	c.SetColorSchema(colorPalettes[swatchNames[0]])
 	c.Draw(arts.NewNoiseLine(1000))
 	// c.ToPNG("fuck.png")
 

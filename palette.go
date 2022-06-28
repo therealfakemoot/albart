@@ -10,7 +10,7 @@ import (
 
 type Palette struct {
 	Name   string
-	Colors []color.Color
+	Colors []color.RGBA
 }
 
 func BuildPaletteFromFile(r io.Reader) ([]Palette, error) {
@@ -38,9 +38,9 @@ func BuildPaletteFromFile(r io.Reader) ([]Palette, error) {
 	return p, nil
 }
 
-func ExtractRecord(record []string) (string, []color.Color, error) {
+func ExtractRecord(record []string) (string, []color.RGBA, error) {
 	name := record[0]
-	colors := make([]color.Color, 0)
+	colors := make([]color.RGBA, 0)
 
 	for _, color := range record[1:] {
 		c, err := extractRGB(color)
