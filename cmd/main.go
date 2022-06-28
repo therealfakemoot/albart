@@ -46,6 +46,7 @@ func main() {
 		track         string
 		style         string
 		paletteDir    string
+		palette       string
 		listPalettes  bool
 		width, height int
 	)
@@ -56,6 +57,7 @@ func main() {
 	flag.StringVar(&logo, "logo", "", "path to logo png")
 	flag.StringVar(&outfile, "outfile", "", "path to output file")
 	flag.StringVar(&paletteDir, "paletteDir", ".", "directory that contains color palette csv files")
+	flag.StringVar(&palette, "palette", "", "name of color palette")
 	flag.StringVar(&track, "track", "", "track title")
 	flag.StringVar(&style, "style", "", "art style: noiseline, blackhole, circlenoise, contourline, domainwarp, gsquare, janus")
 
@@ -111,7 +113,11 @@ func main() {
 	c := generativeart.NewCanva(width, height)
 	c.SetBackground(color.RGBA{0x00, 0x00, 0x00, 0xFF})
 	c.FillBackground()
-	c.SetColorSchema(colorPalettes[swatchNames[0]])
+
+	c.SetColorSchema(colorPalettes[palette])
+	if palette != "" {
+		c.SetColorSchema(colorPalettes[swatchNames[0]])
+	}
 	c.Draw(arts.NewNoiseLine(1000))
 	// c.ToPNG("fuck.png")
 
