@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/csv"
 	"flag"
+	"fmt"
 	"image/color"
 	"io"
 	"log"
@@ -21,7 +22,13 @@ func main() {
 
 	flag.Parse()
 
-	log.Printf("color palette: %#v", buildPalette(infile))
+	f, err := os.Open(infile)
+	if err != nil {
+		log.Println("Couldn't open infile")
+		log.Fatal(err)
+	}
+	palettes, err := BuildPaletteFromFile(f)
+	log.Printf("color palette: %#v", palettes)
 
 }
 
@@ -30,35 +37,30 @@ type Palette struct {
 	Colors []color.Color
 }
 
-func buildPalette(infile string) []Palette {
+func BuildPaletteFromFile(r io.Reader) ([]Palette, error) {
 	p := make([]Palette, 0)
-	f, err := os.Open(infile)
-	if err != nil {
-		log.Println("Couldn't open infile")
-		log.Fatal(err)
-	}
 
-	r := csv.NewReader(f)
+	csvReader := csv.NewReader(r)
 
 	for {
-		record, err := r.Read()
+		record, err := csvReader.Read()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
-			log.Fatalf("Error reading record: %s\n", err)
+			return nil, fmt.Errorf("Error reading record: %w", err)
 		}
 
 		log.Printf("Record found: %#v\n", record)
 		name, colors, err := ExtractRecord(record)
 		if err != nil {
-			log.Fatalf("Error extracting palette from record: %s\n", err)
+			return nil, fmt.Errorf("Error extracting palette from record: %w", err)
 		}
 		p = append(p, Palette{Name: name, Colors: colors})
 
 	}
 
-	return p
+	return p, nil
 }
 
 func ExtractRecord(record []string) (string, []color.Color, error) {
