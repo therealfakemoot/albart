@@ -63,33 +63,14 @@ func main() {
 
 	flag.Parse()
 
-	palettes, err := filepath.Glob(filepath.Join(paletteDir, "*.csv"))
+	var app albart.App
+	err := app.LoadPalettes(paletteDir)
 	if err != nil {
 		log.Fatalf("error scanning for palettes: %s\n", err)
 	}
 
-	log.Println("Found palettes:", palettes)
-
-	colorPalettes := make(map[string][]color.RGBA)
-	swatchNames := make([]string, 0)
-	for _, p := range palettes {
-		f, err := os.Open(p)
-		if err != nil {
-			log.Fatalf("error opening palette %s: %s\n", p, err)
-		}
-
-		pal, err := albart.BuildPaletteFromFile(f)
-		if err != nil {
-			log.Fatalf("error building palette %s: %s\n", p, err)
-		}
-		for _, swatch := range pal {
-			colorPalettes[swatch.Name] = swatch.Colors
-			swatchNames = append(swatchNames, swatch.Name)
-		}
-	}
-
 	if listPalettes {
-		fmt.Printf("%#v\n", swatchNames)
+		fmt.Printf("%#v\n", app.Colors)
 		return
 	}
 
@@ -134,4 +115,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("error saving outfile: %s\n", err)
 	}
+
+	log.Println(app)
 }
