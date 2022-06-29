@@ -109,7 +109,6 @@ func main() {
 		swatchNames[i], swatchNames[j] = swatchNames[j], swatchNames[i]
 	})
 
-	// reasonable colors here?
 	c := generativeart.NewCanva(width, height)
 	c.SetBackground(color.RGBA{0x00, 0x00, 0x00, 0xFF})
 	c.FillBackground()
@@ -119,7 +118,6 @@ func main() {
 		c.SetColorSchema(colorPalettes[swatchNames[0]])
 	}
 	c.Draw(arts.NewNoiseLine(1000))
-	// c.ToPNG("fuck.png")
 
 	baseContext := gg.NewContextForRGBA(c.Img())
 	// dc.MeasureString() for adjusting text rendering
