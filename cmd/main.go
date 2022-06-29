@@ -113,9 +113,9 @@ func main() {
 	c.SetBackground(color.RGBA{0x00, 0x00, 0x00, 0xFF})
 	c.FillBackground()
 
-	c.SetColorSchema(colorPalettes[palette])
+	c.SetColorSchema(colorPalettes[swatchNames[0]])
 	if palette != "" {
-		c.SetColorSchema(colorPalettes[swatchNames[0]])
+		c.SetColorSchema(colorPalettes[palette])
 	}
 	c.Draw(arts.NewNoiseLine(1000))
 
