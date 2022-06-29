@@ -6,8 +6,8 @@ import (
 	"image/color"
 	"log"
 	"math/rand"
-	"os"
-	"path/filepath"
+	// "os"
+	// "path/filepath"
 	"time"
 
 	"github.com/fogleman/gg"
@@ -70,7 +70,10 @@ func main() {
 	}
 
 	if listPalettes {
-		fmt.Printf("%#v\n", app.Colors)
+		for pName, _ := range app.Colors {
+			fmt.Println(pName)
+		}
+		// fmt.Printf("%#v\n", app.Colors)
 		return
 	}
 
@@ -86,18 +89,22 @@ func main() {
 	// logoContext := gg.NewContext(
 	logoContext := gg.NewContextForImage(resize.Resize(uint(float64(width)*0.45), 0, logoFile, resize.Lanczos3))
 
-	rand.Shuffle(len(swatchNames), func(i, j int) {
-		swatchNames[i], swatchNames[j] = swatchNames[j], swatchNames[i]
-	})
+	/*
+		rand.Shuffle(len(swatchNames), func(i, j int) {
+			swatchNames[i], swatchNames[j] = swatchNames[j], swatchNames[i]
+		})
+	*/
 
 	c := generativeart.NewCanva(width, height)
 	c.SetBackground(color.RGBA{0x00, 0x00, 0x00, 0xFF})
 	c.FillBackground()
 
-	c.SetColorSchema(colorPalettes[swatchNames[0]])
-	if palette != "" {
-		c.SetColorSchema(colorPalettes[palette])
-	}
+	/*
+		c.SetColorSchema(colorPalettes[swatchNames[0]])
+		if palette != "" {
+			c.SetColorSchema(colorPalettes[palette])
+		}
+	*/
 	c.Draw(arts.NewNoiseLine(1000))
 
 	baseContext := gg.NewContextForRGBA(c.Img())
