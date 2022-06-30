@@ -38,6 +38,14 @@ func LogoAnchor(c *gg.Context, logo *gg.Context) gg.Point {
 */
 
 func main() {
+	// I could use a closure here to inject state into the RootCommand
+	// but actually, the root command isn't gonna do much, i'm gonna have
+	// subcommands for all the actual work
+	// albart.RootCommand.Action =
+	if err := albart.RootCommand.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
+
 	rand.Seed(time.Now().UnixNano())
 	//rand.Seed(8675309)
 	var (

@@ -44,7 +44,6 @@ func (a *App) LoadConfig(r io.Reader) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%#v\n", te)
 	a.Conf = te.AppConfig
 	return nil
 }
