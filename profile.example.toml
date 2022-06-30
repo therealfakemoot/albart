@@ -1,0 +1,11 @@
+[general]
+outfile = "demo.png"
+styles = ["linenoise", "blackhole"]
+colorDir = "."
+colors = [] # When left empty, randomly select from all discovered choices.
+width = 1400
+height = 1400
+
+[linenoise]
+
+[blackhole]

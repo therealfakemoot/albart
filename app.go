@@ -3,12 +3,37 @@ package albart
 import (
 	"fmt"
 	"image/color"
+	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/BurntSushi/toml"
 )
+
+type AppConfig struct {
+	Styles   []string `toml:"general.styles"`
+	Colors   []string `toml:"general.colors"`
+	Width    int      `toml:"general.width"`
+	Height   int      `toml:"general.height"`
+	Outfile  string   `toml:"general.outfile"`
+	ColorDir string   `toml:"general.colorDir"`
+	Seed     int      `toml:"general.seed"`
+}
 
 type App struct {
 	Colors map[string][]color.RGBA
+	Styles []string // placeholder until i implement proper art style switching
+}
+
+func (a *App) LoadConfig(r io.Reader) error {
+	var ac AppConfig
+
+	_, err := toml.DecodeReader(r, &ac)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%#v\n", ac)
+	return nil
 }
 
 func (a *App) LoadPalettes(d string) error {

@@ -6,7 +6,7 @@ import (
 	"image/color"
 	"log"
 	"math/rand"
-	// "os"
+	"os"
 	// "path/filepath"
 	"time"
 
@@ -45,6 +45,7 @@ func main() {
 		outfile       string
 		track         string
 		style         string
+		profile       string
 		paletteDir    string
 		palette       string
 		listPalettes  bool
@@ -55,6 +56,7 @@ func main() {
 	flag.IntVar(&height, "height", 1000, "output height in pixels")
 	flag.BoolVar(&listPalettes, "listPalettes", false, "output color list")
 	flag.StringVar(&logo, "logo", "", "path to logo png")
+	flag.StringVar(&profile, "profile", "profile.toml", "path to generation profile")
 	flag.StringVar(&outfile, "outfile", "", "path to output file")
 	flag.StringVar(&paletteDir, "paletteDir", ".", "directory that contains color palette csv files")
 	flag.StringVar(&palette, "palette", "", "name of color palette")
@@ -69,8 +71,20 @@ func main() {
 		log.Fatalf("error scanning for palettes: %s\n", err)
 	}
 
+	profileFile, err := os.Open(profile)
+	if err != nil {
+		log.Fatalf("Error opening profile: %s\n", err)
+	}
+	err = app.LoadConfig(profileFile)
+	if err != nil {
+		log.Fatalf("Error parsing profile: %s\n", err)
+	}
+
+	return
+	// below here is the old flow
+
 	if listPalettes {
-		for pName, _ := range app.Colors {
+		for pName := range app.Colors {
 			fmt.Println(pName)
 		}
 		// fmt.Printf("%#v\n", app.Colors)
