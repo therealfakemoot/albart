@@ -1,7 +1,7 @@
 package main
 
 import (
-	"flag"
+	// "flag"
 	"fmt"
 	"image/color"
 	"log"
@@ -46,32 +46,21 @@ func main() {
 		log.Fatal(err)
 	}
 
+	return
+
 	rand.Seed(time.Now().UnixNano())
 	//rand.Seed(8675309)
 	var (
-		logo          string
-		outfile       string
-		track         string
-		style         string
-		profile       string
-		paletteDir    string
-		palette       string
+		logo    string
+		outfile string
+		// track         string
+		// style         string
+		profile    string
+		paletteDir string
+		// palette       string
 		listPalettes  bool
 		width, height int
 	)
-
-	flag.IntVar(&width, "width", 1000, "output width in pixels")
-	flag.IntVar(&height, "height", 1000, "output height in pixels")
-	flag.BoolVar(&listPalettes, "listPalettes", false, "output color list")
-	flag.StringVar(&logo, "logo", "", "path to logo png")
-	flag.StringVar(&profile, "profile", "profile.toml", "path to generation profile")
-	flag.StringVar(&outfile, "outfile", "", "path to output file")
-	flag.StringVar(&paletteDir, "paletteDir", ".", "directory that contains color palette csv files")
-	flag.StringVar(&palette, "palette", "", "name of color palette")
-	flag.StringVar(&track, "track", "", "track title")
-	flag.StringVar(&style, "style", "", "art style: noiseline, blackhole, circlenoise, contourline, domainwarp, gsquare, janus")
-
-	flag.Parse()
 
 	var app albart.App
 	err := app.LoadPalettes(paletteDir)
