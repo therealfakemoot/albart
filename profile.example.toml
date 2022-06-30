@@ -1,11 +1,14 @@
-[general]
+[app]
+seed = 8675309
 outfile = "demo.png"
-styles = ["linenoise", "blackhole"]
-colorDir = "."
-colors = [] # When left empty, randomly select from all discovered choices.
 width = 1400
 height = 1400
 
-[linenoise]
+[app.colors]
+dir = "."
+preferred = ["rose", "cerulean"] # Select randomly for these if they're available. When left empty, randomly select from all discovered choices.
 
-[blackhole]
+[app.style.linenoise]
+weight = 100
+
+[app.style.blackhole]

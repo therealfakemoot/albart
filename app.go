@@ -10,29 +10,42 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+type TomlEnvelope struct {
+	AppConfig AppConfig `toml:"app"`
+}
+
+type AppColors struct {
+	Dir       string   `toml:"dir"`
+	Preferred []string `toml:"preferred"`
+}
+
+type StyleConfig map[string]map[string]interface{}
+
 type AppConfig struct {
-	Styles   []string `toml:"general.styles"`
-	Colors   []string `toml:"general.colors"`
-	Width    int      `toml:"general.width"`
-	Height   int      `toml:"general.height"`
-	Outfile  string   `toml:"general.outfile"`
-	ColorDir string   `toml:"general.colorDir"`
-	Seed     int      `toml:"general.seed"`
+	Styles   StyleConfig `toml:"style"`
+	Colors   AppColors   `toml:"colors"`
+	Width    int         `toml:"width"`
+	Height   int         `toml:"height"`
+	Outfile  string      `toml:"outfile"`
+	ColorDir string      `toml:"colorDir"`
+	Seed     int         `toml:"seed"`
 }
 
 type App struct {
+	Conf   AppConfig
 	Colors map[string][]color.RGBA
 	Styles []string // placeholder until i implement proper art style switching
 }
 
 func (a *App) LoadConfig(r io.Reader) error {
-	var ac AppConfig
+	var te TomlEnvelope
 
-	_, err := toml.DecodeReader(r, &ac)
+	_, err := toml.DecodeReader(r, &te)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%#v\n", ac)
+	fmt.Printf("%#v\n", te)
+	a.Conf = te.AppConfig
 	return nil
 }
 
