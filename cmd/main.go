@@ -16,6 +16,7 @@ import (
 	"github.com/nfnt/resize"
 
 	"github.com/therealfakemoot/albart"
+	"github.com/therealfakemoot/albart/commands"
 )
 
 /*
@@ -42,7 +43,7 @@ func main() {
 	// but actually, the root command isn't gonna do much, i'm gonna have
 	// subcommands for all the actual work
 	// albart.RootCommand.Action =
-	if err := albart.RootCommand.Run(os.Args); err != nil {
+	if err := commands.RootCommand.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
 
