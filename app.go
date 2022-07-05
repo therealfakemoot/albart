@@ -22,13 +22,12 @@ type AppColors struct {
 type StyleConfig map[string]map[string]interface{}
 
 type AppConfig struct {
-	Styles   StyleConfig `toml:"style"`
-	Colors   AppColors   `toml:"colors"`
-	Width    int         `toml:"width"`
-	Height   int         `toml:"height"`
-	Outfile  string      `toml:"outfile"`
-	ColorDir string      `toml:"colorDir"`
-	Seed     int         `toml:"seed"`
+	Styles  StyleConfig `toml:"style"`
+	Colors  AppColors   `toml:"colors"`
+	Width   int         `toml:"width"`
+	Height  int         `toml:"height"`
+	Outfile string      `toml:"outfile"`
+	Seed    int         `toml:"seed"`
 }
 
 type App struct {
