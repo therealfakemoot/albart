@@ -30,6 +30,25 @@ type AppConfig struct {
 	Seed    int         `toml:"seed"`
 }
 
+func NewApp(s string) (*App, error) {
+	var app App
+
+	profileFile, err := os.Open(s)
+	if err != nil {
+		return nil, fmt.Errorf("error opening profile: %w", err)
+	}
+	err = app.LoadConfig(profileFile)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing profile: %w", err)
+	}
+
+	err = app.LoadPalettes(app.Conf.Colors.Dir)
+	if err != nil {
+		return nil, fmt.Errorf("error scanning for palettes: %w", err)
+	}
+	return &app, nil
+}
+
 type App struct {
 	Conf   AppConfig
 	Colors map[string][]color.RGBA
