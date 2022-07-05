@@ -3,17 +3,13 @@ package commands
 import (
 	"fmt"
 	"github.com/urfave/cli/v2"
+	"log"
+	"os"
 
 	"github.com/therealfakemoot/albart"
 )
 
-var colorFlags = []cli.Flag{
-	&cli.StringFlag{
-		Name:     "colorDir",
-		Usage:    "Directory containing color swatch CSV files",
-		Required: true,
-	},
-}
+var colorFlags = []cli.Flag{}
 
 var ColorsCommand = &cli.Command{
 	Name:  "colors",
@@ -21,9 +17,20 @@ var ColorsCommand = &cli.Command{
 	Flags: colorFlags,
 	Action: func(ctx *cli.Context) error {
 		var app albart.App
-		err := app.LoadPalettes(ctx.String("colorDir"))
+		log.Printf("profile arg: %q", ctx.String("profile"))
+
+		profileFile, err := os.Open(ctx.String("profile"))
 		if err != nil {
-			return fmt.Errorf("error scanning for palettes: %w\n", err)
+			return fmt.Errorf("error opening profile: %w", err)
+		}
+		err = app.LoadConfig(profileFile)
+		if err != nil {
+			return fmt.Errorf("error parsing profile: %w", err)
+		}
+
+		err = app.LoadPalettes(app.Conf.Colors.Dir)
+		if err != nil {
+			return fmt.Errorf("error scanning for palettes: %w", err)
 		}
 		for pName := range app.Colors {
 			fmt.Println(pName)
