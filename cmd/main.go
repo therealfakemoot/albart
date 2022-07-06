@@ -2,6 +2,7 @@ package main
 
 import (
 	// "flag"
+	"context"
 	"fmt"
 	"image/color"
 	"log"
@@ -39,11 +40,9 @@ func LogoAnchor(c *gg.Context, logo *gg.Context) gg.Point {
 */
 
 func main() {
-	// I could use a closure here to inject state into the RootCommand
-	// but actually, the root command isn't gonna do much, i'm gonna have
-	// subcommands for all the actual work
-	// albart.RootCommand.Action =
-	if err := commands.RootCommand.Run(os.Args); err != nil {
+	rootCtx, _ := context.WithTimeout(context.Background(), 30*time.Second)
+
+	if err := commands.RootCommand.RunContext(rootCtx, os.Args); err != nil {
 		log.Fatal(err)
 	}
 

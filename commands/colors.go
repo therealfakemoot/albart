@@ -14,10 +14,7 @@ var ColorsCommand = &cli.Command{
 	Usage: "list known colors",
 	Flags: colorFlags,
 	Action: func(ctx *cli.Context) error {
-		app, err := albart.NewApp(ctx.String("profile"))
-		if err != nil {
-			return fmt.Errorf("error loading app: %w", err)
-		}
+		app := ctx.App.Metadata["app"].(*albart.App)
 		for pName := range app.Colors {
 			fmt.Println(pName)
 		}
